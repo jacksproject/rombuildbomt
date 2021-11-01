@@ -1,0 +1,41 @@
+name: Test Build
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+     # - uses: actions/checkout@v2
+      - uses: rokibhasansagar/slimhub_actions@main
+
+      - name: Re-install requirements
+        run: |
+          sudo apt update
+          sudo apt install bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libssl-dev libwxgtk3.0-gtk3-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
+          curl -O https://storage.googleapis.com/git-repo-downloads/repo
+         
+      - name: Initialise ROM repo
+        run: |
+         mkdir rom
+    cd rom && python repo init --depth=1 --no-repo-verify -u https://github.com/PixelExperience/manifest -b eleven -g default,-mips,-darwin,-notdefault
+ 
+      - name: Clone device repo
+        run: |
+       cd rom && git clone https://github.com/atharv2951/local_manifest --depth 1 -b main .repo/local_manifests
+      - name: Start sync
+        run: |
+         cd rom && python repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j1
+          git config --global user.email "atharv2951@gmail.com"
+          git config --global user.name "atharv2951"
+      - name: test rum
+        run: |    
+        cd rom &&  . build/envsetup.sh
+         cd rom && lunch aosp_PLE-userdebug
+          export TZ=Asia/Kolkata
+        cd rom &&  mka bacon
+      
+       - uses: actions/upload-artifact@v2
+         with:
+          name: recoveryzip
+          path: work/out/target/product/*/*.zip
