@@ -18,7 +18,7 @@ jobs:
       - name: Initialise ROM repo
         run: |
          mkdir rom
-    cd rom && repo init --depth=1 --no-repo-verify -u https://github.com/PixelExperience/manifest -b eleven -g default,-mips,-darwin,-notdefault
+         cd rom && repo init --depth=1 --no-repo-verify -u https://github.com/PixelExperience/manifest -b eleven -g default,-mips,-darwin,-notdefault
  
    - name: dh
        run: |
