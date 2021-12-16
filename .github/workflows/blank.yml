@@ -26,8 +26,8 @@ jobs:
       - name: Start sync
         run: |
          cd rom && python repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j1
-          git config --global user.email "atharv2951@gmail.com"
-          git config --global user.name "atharv2951"
+          git config --global user.email "shahinboss888@gmail.com"
+          git config --global user.name "noobisjack"
       - name: test rum
         run: |    
         cd rom &&  . build/envsetup.sh
